@@ -33,13 +33,10 @@ while getopts ":n:s:a" options; do
   esac
 done
 if [ "$ALL" == 1 ];then
-find . -type d |
-  for filename in ./*.mp3
-  do                                     
-  echo "${filename##*/}" >> "${PLAYLISTNAME}"
-  done
+truncate -s 0 ${PLAYLISTNAME}
 exit 0
 else
-echo ${SONG} >> "${PLAYLISTNAME}"
+sed -i "/${SONG}/d" ./"${PLAYLISTNAME}"
 fi
+
 
