@@ -1,0 +1,45 @@
+#!/bin/bash
+
+PLAYLISTNAME=""
+ALL=0
+SONG=""
+
+usage() {                                      
+  echo "Usage: $0 [ -n PLAYLISTNAME ]  [ -s SONG ] [ -a ALL ]" 1>&2 
+}
+exit_abnormal() {                              # Function: Exit with error.
+  usage
+  exit 1
+}
+while getopts ":n:s:a" options; do
+  case "${options}" in                         
+    n)                                         
+      PLAYLISTNAME=${OPTARG}                    
+      ;;
+    s)
+      SONG=${OPTARG}
+      ;;
+	a)
+      ALL=1
+      ;;
+	
+	:)                                         # If expected argument omitted:
+      echo "Error: -${OPTARG} requires an argument."
+      exit_abnormal                            # Exit abnormally.
+      ;;
+    *)                                         # If unknown (any other) option:
+      exit_abnormal                            # Exit abnormally.
+      ;;
+  esac
+done
+if [ "$ALL" == 1 ];then
+find . -type d |
+  for filename in ./*.mp3
+  do                                     
+  echo "${filename##*/}" >> "${PLAYLISTNAME}"
+  done
+exit 0
+else
+echo ${SONG} >> "${PLAYLISTNAME}"
+fi
+
