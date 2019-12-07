@@ -10,7 +10,6 @@ exit_abnormal() {                              # Function: Exit with error.
   usage
   exit 1
 }
-
 while getopts ":n:a" options; do
   case "${options}" in                         
     n)                                         
@@ -28,19 +27,14 @@ while getopts ":n:a" options; do
       ;;
   esac
 done
-FILE="${PLAYLISTNAME}.m3u"
-if [ ! -f $FILE ];then
-	touch "${PLAYLISTNAME}.m3u"
-fi
+touch "${PLAYLISTNAME}.m3u"
 if [ "$ALL" == 1 ];then
 find . -type d |
-while read subdir
-do
-  for filename in "$subdir"/*.mp3
+
+  for filename in ./*.mp3
   do                                     
   echo "${filename##*/}" >> "${PLAYLISTNAME}.m3u"
   done
-done
 fi
 exit 0
 }

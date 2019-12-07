@@ -1,0 +1,41 @@
+#!/bin/bash
+
+PLAYLISTNAME=""
+ALL=0
+SONG=""
+
+while getopts ":n:s:a" options; do
+  case "${options}" in                         
+    n)                                         
+      PLAYLISTNAME=${OPTARG}                    
+      ;;
+    s)
+      SONG=${OPTARG}
+      ;;
+	a)
+      ALL=1
+      ;;
+	
+	:)                                         # If expected argument omitted:
+      echo "Error: -${OPTARG} requires an argument."
+      exit_abnormal                            # Exit abnormally.
+      ;;
+    *)                                         # If unknown (any other) option:
+      exit_abnormal                            # Exit abnormally.
+      ;;
+  esac
+done
+if [ "$ALL" == 1 ];then
+find . -type d |
+while read subdir
+do
+  for filename in "$subdir"/*.mp3
+  do                                     
+  echo "${filename##*/}" >> "${PLAYLISTNAME}.m3u"
+  done
+done
+exit 0
+else
+echo ${SONG} >> "${PLAYLISTNAME}.m3u"
+fi
+
